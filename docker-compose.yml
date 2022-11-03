@@ -4,7 +4,7 @@ services:
 
 # Workspace Container
     workspace:
-      container_name: your_project_workspace
+      container_name: uyegir_workspace
       build:
         context: ./env/docker/workspace
         args:
@@ -21,11 +21,11 @@ services:
         - ~/.aws:/home/laradock/.aws
       tty: true
       networks:
-        - your_project_network
+        - uyegir_network
 
 # PHP-FPM
     php-fpm:
-      container_name: your_project_php_fpm
+      container_name: uyegir_php_fpm
       build:
         context: ./env/docker/php-fpm
         args:
@@ -38,11 +38,11 @@ services:
       depends_on:
         - workspace
       networks:
-        - your_project_network
+        - uyegir_network
 
 # NGINX
     nginx:
-      container_name: your_project_nginx
+      container_name: uyegir_nginx
       build:
         context: ./env/docker/nginx
       volumes:
@@ -56,29 +56,32 @@ services:
       ports:
         - 80:80
       networks:
-        - your_project_network
+        - uyegir_network
 
 # PostgreSQL
     postgres:
-      container_name: your_project_postgres
-      build:
-        context: ./env/docker/postgres
+      container_name: uyegir_postgres
+      image: postgres:latest
+      # build:
+      #   context: ./env/docker/postgres
       volumes:
         - ${DATA_PATH_HOST}postgres:/var/lib/postgresql/data
       environment:
         - POSTGRES_DB=${POSTGRES_DB}
         - POSTGRES_USER=${POSTGRES_USER}
         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      ports:
+        - 5433:5432
       networks:
-        - your_project_network
+        - uyegir_network
 
 # Redis
     redis:
-      container_name: your_project_redis
+      container_name: uyegir_redis
       image: "redis"
-      hostname: your_project_redis
+      hostname: uyegir_redis
       networks:
-        - your_project_network
+        - uyegir_network
 
 # Volumes configuration
 volumes:
@@ -87,5 +90,5 @@ volumes:
 
 # Network configuration
 networks:
-  your_project_network:
-    name: your_project_network
+  uyegir_network:
+    name: uyegir_network

@@ -14,6 +14,7 @@ class AuthController extends Controller
     use JWTAuthenticationTrait;
     public function token(Request $request)
     {
+		echo('Merhaba Dünya');
         //$request.params.admin == 'admin@admin.com' && $request.params.password == 'Password'
         if(false) {
             $age = array("Peter" => 35, "Ben" => 37, "Joe" => 43);

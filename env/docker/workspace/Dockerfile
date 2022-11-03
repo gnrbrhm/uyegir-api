@@ -2,51 +2,51 @@ ARG PHP_VERSION=${PHP_VERSION}
 
 FROM php:${PHP_VERSION}-cli
 
-RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+# RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
 # Install packages for required extensions
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-    libz-dev \
-    libpq-dev \
-    libssl-dev \
-    libmcrypt-dev \
-    libicu-dev \
-    libxml2-dev \
-    curl \
-    git \
-    zip \
-    unzip \
-    libzip-dev \
-    vim \
-    nano \
-    wget \
-    zsh \
-    ssh-client \
-    iputils-ping \
-    libonig-dev \
-  && rm -rf /var/lib/apt/lists/*
+	&& apt-get install -y --no-install-recommends \
+	libz-dev \
+	libpq-dev \
+	libssl-dev \
+	libmcrypt-dev \
+	libicu-dev \
+	libxml2-dev \
+	curl \
+	git \
+	zip \
+	unzip \
+	libzip-dev \
+	vim \
+	nano \
+	wget \
+	zsh \
+	ssh-client \
+	iputils-ping \
+	libonig-dev \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Install Laravel required extensions
 RUN docker-php-ext-install json && \
-    docker-php-ext-install mbstring && \
-    docker-php-ext-install xml && \
-    docker-php-ext-install ctype && \
-    docker-php-ext-install tokenizer && \
-    docker-php-ext-install pdo_pgsql && \
-    docker-php-ext-install opcache && \
-    docker-php-ext-install zip && \
-    docker-php-ext-configure intl && docker-php-ext-install intl && \
-    docker-php-ext-install bcmath && \
-    docker-php-ext-install sockets
+	docker-php-ext-install mbstring && \
+	docker-php-ext-install xml && \
+	docker-php-ext-install ctype && \
+	docker-php-ext-install tokenizer && \
+	docker-php-ext-install pdo_pgsql && \
+	docker-php-ext-install opcache && \
+	docker-php-ext-install zip && \
+	docker-php-ext-configure intl && docker-php-ext-install intl && \
+	docker-php-ext-install bcmath && \
+	docker-php-ext-install sockets
 
 # Install required PECL extensions
 RUN pecl install \
-    redis
+	redis
 
 # Enable above
 RUN docker-php-ext-enable \
-    redis
+	redis
 
 ###########################################################################
 # Laradock non-root user:
@@ -62,8 +62,8 @@ ARG PGID=1000
 ENV PGID ${PGID}
 
 RUN groupadd -g ${PGID} laradock && \
-    useradd -u ${PUID} -g laradock -m laradock && \
-    usermod -p "*" laradock
+	useradd -u ${PUID} -g laradock -m laradock && \
+	usermod -p "*" laradock
 
 ###########################################################################
 # Set Timezone
@@ -84,18 +84,18 @@ COPY ./aliases.sh /root/aliases.sh
 COPY ./aliases.sh /home/laradock/aliases.sh
 
 RUN sed -i 's/\r//' /root/aliases.sh && \
-    sed -i 's/\r//' /home/laradock/aliases.sh && \
-    chown laradock:laradock /home/laradock/aliases.sh && \
-    echo "" >> ~/.bashrc && \
-    echo "# Load Custom Aliases" >> ~/.bashrc && \
-    echo "source ~/aliases.sh" >> ~/.bashrc && \
+	sed -i 's/\r//' /home/laradock/aliases.sh && \
+	chown laradock:laradock /home/laradock/aliases.sh && \
+	echo "" >> ~/.bashrc && \
+	echo "# Load Custom Aliases" >> ~/.bashrc && \
+	echo "source ~/aliases.sh" >> ~/.bashrc && \
 	echo "" >> ~/.bashrc
 
 USER laradock
 
 RUN echo "" >> ~/.bashrc && \
-    echo "# Load Custom Aliases" >> ~/.bashrc && \
-    echo "source ~/aliases.sh" >> ~/.bashrc && \
+	echo "# Load Custom Aliases" >> ~/.bashrc && \
+	echo "source ~/aliases.sh" >> ~/.bashrc && \
 	echo "" >> ~/.bashrc
 
 ###########################################################################
@@ -109,14 +109,14 @@ ENV COMPOSER_PROCESS_TIMEOUT ${COMPOSER_PROCESS_TIMEOUT}
 
 # Install composer and add its bin to the PATH.
 RUN curl -s http://getcomposer.org/installer | php && \
-    echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
-    mv composer.phar /usr/local/bin/composer
+	echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
+	mv composer.phar /usr/local/bin/composer
 
 USER laradock
 
 # Export composer vendor path
 RUN echo "" >> ~/.bashrc && \
-    echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> ~/.bashrc
+	echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
 ###########################################################################
 # Non-root user : PHPUnit path
@@ -125,7 +125,7 @@ RUN echo "" >> ~/.bashrc && \
 # add ./vendor/bin to non-root user's bashrc (needed for phpunit)
 USER laradock
 RUN echo "" >> ~/.bashrc && \
-    echo 'export PATH="/var/www/vendor/bin:$PATH"' >> ~/.bashrc
+	echo 'export PATH="/var/www/vendor/bin:$PATH"' >> ~/.bashrc
 
 ###########################################################################
 # Crontab
@@ -141,13 +141,13 @@ RUN chmod -R 644 /etc/cron.d
 
 USER root
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
-    && chsh -s $(which zsh) $(whoami) \
-    && chsh -s $(which zsh) laradock
+	&& chsh -s $(which zsh) $(whoami) \
+	&& chsh -s $(which zsh) laradock
 COPY ./.zshrc /home/laradock/zshrc
 
 USER laradock
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
-    mv ~/zshrc ~/.zshrc
+	mv ~/zshrc ~/.zshrc
 
 ###########################################################################
 # xDebug:
@@ -157,19 +157,19 @@ USER root
 ARG PHP_XDEBUG_ENABLE=false
 ARG PHP_XDEBUG_VERSION=
 RUN if [ ${PHP_XDEBUG_ENABLE} = true ]; then \
-    # Install the xdebug extension
-    # when php is 7.3, xdebug version has to be xdebug-2.7.0
-    pecl install xdebug${PHP_XDEBUG_VERSION} && \
-    docker-php-ext-enable xdebug \
-;fi
+	# Install the xdebug extension
+	# when php is 7.3, xdebug version has to be xdebug-2.7.0
+	pecl install xdebug${PHP_XDEBUG_VERSION} && \
+	docker-php-ext-enable xdebug \
+	;fi
 
 # Copy xdebug configuration for remote debugging
 COPY ./xdebug.ini /usr/local/etc/php/conf.d/
 
 ARG PHP_XDEBUG_REMOTE_CONNECT_BACK=false
 RUN if [ ${PHP_XDEBUG_REMOTE_CONNECT_BACK} = true ]; then \
-    echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-;fi
+	echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
+	;fi
 
 
 ###########################################################################
@@ -191,8 +191,8 @@ RUN mkdir /home/laradock/.config && chown laradock:laradock /home/laradock/.conf
 
 # Clean up
 RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    rm /var/log/lastlog /var/log/faillog
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+	rm /var/log/lastlog /var/log/faillog
 
 # Set default work directory
 WORKDIR /var/www

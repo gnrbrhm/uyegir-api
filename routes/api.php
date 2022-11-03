@@ -17,16 +17,16 @@ use Illuminate\Http\Request;
 /*
  * Welcome route - link to any public API documentation here
  *
-Route::get('/', function () {
-    echo 'Welcome to our API';
-});
-*/
+ Route::get('/', function () {
+	 echo 'Welcome to our API';
+	});
+	*/
 Route::get('/','App\Http\Controllers\Auth\AuthController@token');
 Route::get('/users', 'App\Http\Controllers\UserController@getAll');
 Route::get('/roles', 'App\Http\Controllers\RoleController@getAll');
 /** @var \Dingo\Api\Routing\Router $api */
 $api = app('Dingo\Api\Routing\Router');
-$api->version('v1', ['middleware' => ['api']], function (Router $api) {
+$api->version('v1', ['middleware' => ['api']], function ($api) {
     /*
      * Authentication
      */
@@ -71,4 +71,8 @@ $api->version('v1', ['middleware' => ['api']], function (Router $api) {
             $api->get('/', 'App\Http\Controllers\RoleController@getAll');
         });
     });
+});
+$api->version('v2', function ($api) {
+
+    $api->get('users/{id}', 'App\Http\Controllers\UserController@getAll');
 });

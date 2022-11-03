@@ -15,6 +15,7 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+		echo('Merhaba Gailil');
         throw new UnauthorizedHttpException('Not logged in');
     }
 }

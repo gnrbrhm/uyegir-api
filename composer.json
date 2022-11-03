@@ -17,13 +17,15 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.3|^8.1",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.5",
-        "specialtactics/l5-api": "^3.0"
+        "specialtactics/l5-api": "^3.0",
+		"dingo/api": "^3.0.0"
+
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9",

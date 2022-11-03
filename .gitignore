@@ -5,7 +5,7 @@
 /storage/*.key
 storage/laradock
 /vendor
-.env
+# .env
 .env.backup
 .phpunit.result.cache
 docker-compose.override.yml
